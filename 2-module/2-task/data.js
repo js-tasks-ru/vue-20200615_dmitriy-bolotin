@@ -10,7 +10,7 @@ export const MEETUP_ID = 6;
  * @return {string} - ссылка на изображение митапа
  */
 export function getMeetupCoverLink(meetup) {
-  return `${API_URL}/images/${meetup.imageId}`;
+  return meetup.imageId ? `${API_URL}/images/${meetup.imageId}` : undefined;
 }
 
 /**
@@ -50,3 +50,15 @@ export const agendaItemIcons = {
   afterparty: 'cal-sm',
   other: 'cal-sm',
 };
+
+/**
+ * Возвращает локализованную дату митапа
+ * @param date - timestamp даты митапа
+ * @returns {string} - локализованная дата
+ */
+export const localeDate = (date) =>
+  new Date(date).toLocaleString(navigator.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });

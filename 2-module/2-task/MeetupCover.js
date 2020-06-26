@@ -1,11 +1,16 @@
-// import { getMeetupCoverLink } from './data.js';
-
 export const MeetupCover = {
-  template: `<div class="meetup-cover" style="--bg-url: url('https://course-vue.javascript.ru/api/images/2')">
-        <h1 class="meetup-cover__title">Название митапа</h1>
-    </div>`,
+  name: 'MeetupCover',
 
-  // Пропсы
+  template: `
+   <div class="meetup-cover" :style="link ? \`--bg-url: url(\${link})\` : ''">
+      <h1 class="meetup-cover__title">{{title}}</h1>
+   </div>`,
 
-  // Возможно, тут потребуется computed
+  props: {
+    link: String,
+    title: {
+      type: String,
+      default: 'Митап',
+    },
+  },
 };
