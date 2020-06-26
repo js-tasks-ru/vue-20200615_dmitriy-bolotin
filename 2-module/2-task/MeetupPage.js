@@ -4,14 +4,17 @@ import {
   fetchMeetup,
   createIconLink,
   localeDate,
-  getMeetupCoverLink,
   agendaItemTitles,
 } from './data.js';
 
 export const MeetupPage = {
   name: 'MeetupPage',
 
-  template: `<div><meetup-view></meetup-view></div>`,
+  template: `<div v-cloak>
+    <meetup-view :meetup="meetup" v-if="!isLoading && meetup"></meetup-view>
+    <div v-else-if="isLoading">...loading</div>
+    <div v-else>no data</div>
+  </div>`,
 
   components: {
     MeetupView,
@@ -33,7 +36,6 @@ export const MeetupPage = {
       return {
         ...this.meetupRaw,
         localeDate: localeDate(this.meetupRaw.date),
-        coverLink: getMeetupCoverLink(this.meetupRaw),
         normalizedAgenda: this.meetupRaw.agenda.map((agendaItem) => ({
           ...agendaItem,
           title: agendaItem.title || agendaItemTitles[agendaItem.type],

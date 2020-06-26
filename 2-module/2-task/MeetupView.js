@@ -1,14 +1,15 @@
-// import { MeetupCover } from './MeetupCover.js';
+import { MeetupCover } from './MeetupCover.js';
 // import { MeetupDescription } from './MeetupDescription.js';
 // import { MeetupAgenda } from './MeetupAgenda.js';
 // import { MeetupInfo } from './MeetupInfo.js';
+import { getMeetupCoverLink } from './data.js';
 
 export const MeetupView = {
   name: 'MeetupView',
 
   template: `
     <div>
-      <!-- meetup-cover -->
+      <meetup-cover :link="createMeetupLink()" :title="meetup.title"></meetup-cover>
       <div class="container">
         <div class="meetup">
           <div class="meetup__content">
@@ -25,7 +26,17 @@ export const MeetupView = {
       </div>
     </div>`,
 
-  // Components
+  components: {
+    MeetupCover,
+  },
 
-  // Props
+  props: {
+    meetup: Object,
+  },
+
+  methods: {
+    createMeetupLink() {
+      return getMeetupCoverLink(this.meetup);
+    },
+  },
 };
