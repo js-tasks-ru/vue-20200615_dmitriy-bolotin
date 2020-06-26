@@ -1,5 +1,5 @@
 export const CounterButton = {
-  template: `<button type="button" @click="handleClick" v-bind:value="count">{{count}}</button>`,
+  template: `<button type="button" @click="handleClick" :value="count">{{count}}</button>`,
 
   props: {
     count: {
