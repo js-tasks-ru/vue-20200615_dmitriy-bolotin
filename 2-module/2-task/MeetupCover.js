@@ -6,6 +6,9 @@ export const MeetupCover = {
 
   props: {
     link: String,
-    title: String,
+    title: {
+      type: String,
+      default: 'Митап',
+    },
   },
 };
