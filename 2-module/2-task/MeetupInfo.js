@@ -1,20 +1,28 @@
+import { localeDate } from './data.js';
+
 export const MeetupInfo = {
   template: `<ul class="info-list">
-      <li>
+      <li v-if="meetup.organizer">
         <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-user.svg" />
-        Организатор
+        {{meetup.organizer}}
       </li>
-      <li>
+      <li v-if="meetup.place">
         <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-map.svg" />
-        Место
+        {{meetup.place}}
       </li>
-      <li>
+      <li v-if="meetup.date">
         <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-cal-lg.svg" />
-        <time datetime="2020-01-01">1 янв. 2020</time>
+        <time :datetime="meetup.date">{{localeDate}}</time>
       </li>
     </ul>`,
 
-  // Пропсы
+  props: {
+    meetup: Object,
+  },
 
-  // computed
+  computed: {
+    localeDate() {
+      return localeDate(this.meetup.date);
+    },
+  },
 };

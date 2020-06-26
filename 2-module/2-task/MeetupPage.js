@@ -3,7 +3,6 @@ import {
   MEETUP_ID,
   fetchMeetup,
   createIconLink,
-  localeDate,
   agendaItemTitles,
 } from './data.js';
 
@@ -35,7 +34,6 @@ export const MeetupPage = {
 
       return {
         ...this.meetupRaw,
-        localeDate: localeDate(this.meetupRaw.date),
         normalizedAgenda: this.meetupRaw.agenda.map((agendaItem) => ({
           ...agendaItem,
           title: agendaItem.title || agendaItemTitles[agendaItem.type],
