@@ -1,6 +1,6 @@
 import { MeetupCover } from './MeetupCover.js';
 import { MeetupDescription } from './MeetupDescription.js';
-// import { MeetupAgenda } from './MeetupAgenda.js';
+import { MeetupAgenda } from './MeetupAgenda.js';
 import { MeetupInfo } from './MeetupInfo.js';
 import { getMeetupCoverLink } from './data.js';
 
@@ -17,7 +17,7 @@ export const MeetupView = {
             <meetup-description :description="meetup.description"></meetup-description>
 
             <h3>Программа</h3>
-            <!-- meetup agenda -->
+            <meetup-agenda :agenda="meetup.agenda"></meetup-agenda>
           </div>
           <div class="meetup__aside">
             <meetup-info :meetup="meetup"></meetup-info>
@@ -30,6 +30,7 @@ export const MeetupView = {
     MeetupCover,
     MeetupDescription,
     MeetupInfo,
+    MeetupAgenda,
   },
 
   props: {

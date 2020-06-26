@@ -62,11 +62,3 @@ export const localeDate = (date) =>
     month: 'long',
     day: 'numeric',
   });
-
-/**
- * Возвращает ссылку на изображение иконки события митапа
- * @param agendaItem - объект с описанием события митапа (и параметром type - тип митапа)
- * @return {string} - ссылка на изображение иконки митапа
- */
-export const createIconLink = (agendaItem) =>
-  `/assets/icons/icon-${agendaItemIcons[agendaItem.type]}.svg`;

@@ -1,10 +1,5 @@
 import { MeetupView } from './MeetupView.js';
-import {
-  MEETUP_ID,
-  fetchMeetup,
-  createIconLink,
-  agendaItemTitles,
-} from './data.js';
+import { MEETUP_ID, fetchMeetup } from './data.js';
 
 export const MeetupPage = {
   name: 'MeetupPage',
@@ -22,40 +17,22 @@ export const MeetupPage = {
   data() {
     return {
       isLoading: false,
-      meetupRaw: null,
+      meetup: null,
     };
   },
 
-  computed: {
-    meetup() {
-      if (!this.meetupRaw) {
-        return;
-      }
-
-      return {
-        ...this.meetupRaw,
-        normalizedAgenda: this.meetupRaw.agenda.map((agendaItem) => ({
-          ...agendaItem,
-          title: agendaItem.title || agendaItemTitles[agendaItem.type],
-          iconLink: createIconLink(agendaItem),
-          isTalk: agendaItem.type === 'talk',
-        })),
-      };
-    },
-  },
-
   mounted() {
-    this.loadMeetupRaw();
+    this.loadMeetup();
   },
 
   methods: {
-    async loadMeetupRaw() {
-      let meetupRaw;
+    async loadMeetup() {
+      let meetup;
 
       this.isLoading = true;
 
       try {
-        meetupRaw = await fetchMeetup(MEETUP_ID);
+        meetup = await fetchMeetup(MEETUP_ID);
       } catch (error) {
         this.isLoading = false;
         console.error(error);
@@ -63,7 +40,7 @@ export const MeetupPage = {
         return;
       }
 
-      this.meetupRaw = meetupRaw;
+      this.meetup = meetup;
       this.isLoading = false;
     },
   },
