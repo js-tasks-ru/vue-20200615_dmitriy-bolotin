@@ -12,7 +12,9 @@ const MEETUP_ID = 6;
  * @return {string} - ссылка на изображение митапа
  */
 function getMeetupCoverLink(meetup) {
-  return `${API_URL}/images/${meetup.imageId}`;
+  const { imageId } = meetup;
+
+  return imageId ? `${API_URL}/images/${imageId}` : undefined;
 }
 
 /**
@@ -44,23 +46,76 @@ const agendaItemIcons = {
   other: 'cal-sm',
 };
 
+/**
+ * Возвращает локализованную дату митапа
+ * @param date - timestamp даты митапа
+ * @returns {string} - локализованная дата
+ */
+const localeDate = (date) =>
+  new Date(date).toLocaleString(navigator.language, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+/**
+ * Возвращает ссылку на изображение иконки события митапа
+ * @param agendaItem - объект с описанием события митапа (и параметром type - тип митапа)
+ * @return {string} - ссылка на изображение иконки митапа
+ */
+const createIconLink = (agendaItem) =>
+  `/assets/icons/icon-${agendaItemIcons[agendaItem.type]}.svg`;
+
 export const app = new Vue({
   el: '#app',
 
   data: {
-    //
+    isLoading: false,
+    meetupRaw: null,
   },
 
   mounted() {
-    // Требуется получить данные митапа с API
+    this.loadMeetupRaw();
   },
 
   computed: {
-    //
+    meetup() {
+      if (!this.meetupRaw) {
+        return;
+      }
+
+      return {
+        ...this.meetupRaw,
+        localeDate: localeDate(this.meetupRaw.date),
+        coverLink: getMeetupCoverLink(this.meetupRaw),
+        normalizedAgenda: this.meetupRaw.agenda.map((agendaItem) => ({
+          ...agendaItem,
+          title: agendaItem.title || agendaItemTitles[agendaItem.type],
+          iconLink: createIconLink(agendaItem),
+          isTalk: agendaItem.type === 'talk',
+        })),
+      };
+    },
   },
 
   methods: {
-    // Получение данных с API предпочтительнее оформить отдельным методом,
-    // а не писать прямо в mounted()
+    async loadMeetupRaw() {
+      let meetupRaw;
+
+      this.isLoading = true;
+
+      try {
+        const response = await fetch(`${API_URL}/meetups/${MEETUP_ID}`);
+        meetupRaw = await response.json();
+      } catch (error) {
+        this.isLoading = false;
+        console.error(error);
+
+        return;
+      }
+
+      this.meetupRaw = meetupRaw;
+      this.isLoading = false;
+    },
   },
 });
