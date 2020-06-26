@@ -29,13 +29,13 @@
               </div>
               <div class="meetup-agenda__item-col" v-if="agendaItem.startsAt && agendaItem.endsAt">{{agendaItem.startsAt}} - {{agendaItem.endsAt}}</div>
               <div class="meetup-agenda__item-col">
-                <h5 class="meetup-agenda__title" v-if="agendaItem.title" v-html="agendaItem.title"></h5>
+                <h5 class="meetup-agenda__title" v-if="agendaItem.title">{{agendaItem.title}}</h5>
                 <p v-if="agendaItem.isTalk">
                   <span>{{agendaItem.speaker}}</span>
                   <span class="meetup-agenda__dot"></span>
                   <span class="meetup-agenda__lang">{{agendaItem.language}}</span>
                 </p>
-                <p v-if="agendaItem.description" v-html="agendaItem.description"></p>
+                <p v-if="agendaItem.description">{{agendaItem.description}}</p>
               </div>
             </div>
           </div>
