@@ -1,6 +1,8 @@
 import { localeDate } from './data.js';
 
 export const MeetupInfo = {
+  name: 'MeetupInfo',
+
   template: `<ul class="info-list">
       <li v-if="meetup.organizer">
         <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-user.svg" />
@@ -17,7 +19,10 @@ export const MeetupInfo = {
     </ul>`,
 
   props: {
-    meetup: Object,
+    meetup: {
+      type: Object,
+      required: true,
+    },
   },
 
   computed: {

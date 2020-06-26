@@ -30,7 +30,10 @@ export const MeetupAgendaItem = {
     </div>`,
 
   props: {
-    agendaItem: Object,
+    agendaItem: {
+      type: Object,
+      required: true,
+    },
   },
 
   computed: {

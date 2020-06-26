@@ -9,7 +9,7 @@ export const MeetupView = {
 
   template: `
     <div>
-      <meetup-cover :link="createMeetupLink()" :title="meetup.title"></meetup-cover>
+      <meetup-cover :link="coverLink" :title="meetup.title"></meetup-cover>
       <div class="container">
         <div class="meetup">
           <div class="meetup__content">
@@ -34,11 +34,14 @@ export const MeetupView = {
   },
 
   props: {
-    meetup: Object,
+    meetup: {
+      type: Object,
+      required: true,
+    },
   },
 
-  methods: {
-    createMeetupLink() {
+  computed: {
+    coverLink() {
       return getMeetupCoverLink(this.meetup);
     },
   },

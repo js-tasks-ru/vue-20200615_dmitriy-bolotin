@@ -5,7 +5,7 @@ export const MeetupPage = {
   name: 'MeetupPage',
 
   template: `<div v-cloak>
-    <meetup-view :meetup="meetup" v-if="!isLoading && meetup"></meetup-view>
+    <meetup-view v-if="!isLoading && meetup" :meetup="meetup"></meetup-view>
     <div v-else-if="isLoading">...loading</div>
     <div v-else>no data</div>
   </div>`,
@@ -40,7 +40,7 @@ export const MeetupPage = {
         return;
       }
 
-      this.meetup = meetup;
+      this.meetup = meetup || null;
       this.isLoading = false;
     },
   },
