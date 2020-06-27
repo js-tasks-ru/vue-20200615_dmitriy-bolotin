@@ -1,6 +1,7 @@
 /**
- * Возвращает локализованную дату митапа
- * @returns {string} - локализованная дата
+ * Возвращает локализованный месяц, год
+ * @param currentDate - объект Date текущего дня
+ * @returns {string} - локализованная строка формата "month YYYY"
  */
 export const getLocaleCurrentMonthYear = (currentDate) => {
   const localeMonth = currentDate.toLocaleString(navigator.language, {
@@ -25,17 +26,13 @@ export const MeetupsCalendar = {
         </div>
       </div>
       <div class="rangepicker__date-grid">
-        <div class="rangepicker__cell rangepicker__cell_inactive">28</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">29</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">30</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">31</div>
-        <div class="rangepicker__cell">
-          1
-          <a class="rangepicker__event">Митап</a>
-          <a class="rangepicker__event">Митап</a>
+        <div
+          v-for="day in calendar"
+          :key="day.dateStr"
+          :class="['rangepicker__cell', {'rangepicker__cell_inactive': day.notCurrentMonth}]">
+          {{day.date}}
+          <a class="rangepicker__event" v-if="day.meetups.length" v-for="meetup in day.meetups">{{meetup.title}}</a>
         </div>
-        <div class="rangepicker__cell">2</div>
-        <div class="rangepicker__cell">3</div>
       </div>
     </div>
   </div>`,
@@ -43,7 +40,7 @@ export const MeetupsCalendar = {
   props: {
     meetups: {
       type: Array,
-      default: [],
+      required: true,
     },
   },
 
@@ -54,6 +51,16 @@ export const MeetupsCalendar = {
   },
 
   computed: {
+    meetupsByDate() {
+      return this.meetups.map((meetup) => {
+        const { date, title } = meetup;
+        const meetupDate = new Date(date);
+        const dateStr = meetupDate.toDateString();
+
+        return { title, dateStr };
+      });
+    },
+
     currentMonthYear() {
       return getLocaleCurrentMonthYear(this.currentDate);
     },
@@ -64,6 +71,45 @@ export const MeetupsCalendar = {
 
     currentMonth() {
       return this.currentDate.getMonth();
+    },
+
+    calendar() {
+      const monthStart = new Date(this.currentYear, this.currentMonth);
+      const calStartDay = new Date(monthStart);
+      const daysInCurrentMonth = new Date(
+        this.currentYear,
+        this.currentMonth + 1,
+        0,
+      ).getDate();
+      const weeksInCal = daysInCurrentMonth % 4 === 0 ? 4 : 5;
+
+      // + 1 - начало месяца с понедельника
+      calStartDay.setDate(monthStart.getDate() - monthStart.getDay() + 1);
+
+      let week = 1;
+      let dayCount = 0;
+      const weeksArr = [];
+
+      while (week <= weeksInCal) {
+        const month = calStartDay.getMonth();
+        const date = calStartDay.getDate();
+        const notCurrentMonth = month !== this.currentMonth;
+        const dateStr = calStartDay.toDateString();
+        const meetups = this.meetupsByDate.filter(
+          (meetup) => meetup.dateStr === dateStr,
+        );
+
+        weeksArr.push({ date, dateStr, notCurrentMonth, meetups });
+        dayCount += 1;
+        calStartDay.setDate(calStartDay.getDate() + 1);
+
+        if (dayCount === 7) {
+          week += 1;
+          dayCount = 0;
+        }
+      }
+
+      return weeksArr;
     },
   },
 
