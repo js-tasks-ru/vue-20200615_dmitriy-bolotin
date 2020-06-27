@@ -1,6 +1,16 @@
-/*
-  Полезные функции по работе с датой можно описать вне Vue компонента
+/**
+ * Возвращает локализованную дату митапа
+ * @returns {string} - локализованная дата
  */
+export const getLocaleCurrentMonthYear = (currentDate) => {
+  const localeMonth = currentDate.toLocaleString(navigator.language, {
+    month: 'long',
+  });
+
+  const year = currentDate.getFullYear();
+
+  return `${localeMonth} ${year}`;
+};
 
 export const MeetupsCalendar = {
   name: 'MeetupsCalendar',
@@ -9,9 +19,9 @@ export const MeetupsCalendar = {
     <div class="rangepicker__calendar">
       <div class="rangepicker__month-indicator">
         <div class="rangepicker__selector-controls">
-          <button class="rangepicker__selector-control-left"></button>
-          <div>Июнь 2020</div>
-          <button class="rangepicker__selector-control-right"></button>
+          <button class="rangepicker__selector-control-left" @click="decrementMonth"></button>
+          <div>{{currentMonthYear}}</div>
+          <button class="rangepicker__selector-control-right" @click="incrementMonth"></button>
         </div>
       </div>
       <div class="rangepicker__date-grid">
@@ -30,13 +40,40 @@ export const MeetupsCalendar = {
     </div>
   </div>`,
 
-  // Пропсы
+  props: {
+    meetups: {
+      type: Array,
+      default: [],
+    },
+  },
 
-  // В качестве локального состояния требуется хранить что-то,
-  // что позволит определить текущий показывающийся месяц.
-  // Изначально должен показываться текущий месяц
+  data() {
+    return {
+      currentDate: new Date(),
+    };
+  },
 
-  // Вычислимые свойства помогут как с получением списка дней, так и с выводом информации
+  computed: {
+    currentMonthYear() {
+      return getLocaleCurrentMonthYear(this.currentDate);
+    },
 
-  // Методы понадобятся для переключения между месяцами
+    currentYear() {
+      return this.currentDate.getFullYear();
+    },
+
+    currentMonth() {
+      return this.currentDate.getMonth();
+    },
+  },
+
+  methods: {
+    incrementMonth() {
+      this.currentDate = new Date(this.currentYear, this.currentMonth + 1, 1);
+    },
+
+    decrementMonth() {
+      this.currentDate = new Date(this.currentYear, this.currentMonth - 1, 1);
+    },
+  },
 };
