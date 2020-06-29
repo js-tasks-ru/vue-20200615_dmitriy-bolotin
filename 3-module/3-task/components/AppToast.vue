@@ -1,12 +1,8 @@
 <template>
-  <div class="toasts">
-    <div class="toast toast_success">
-      <app-icon icon="check-circle" />
-      <span>Success</span>
-    </div>
-    <div class="toast toast_error">
-      <app-icon icon="alert-circle" />
-      <span>Error</span>
+  <div class="toasts" v-if="toasts.length">
+    <div v-for="toast in toasts" :class="['toast', toast.className]">
+      <app-icon :icon="toast.icon" />
+      <span>{{toast.message}}</span>
     </div>
   </div>
 </template>
@@ -16,15 +12,64 @@ import AppIcon from './AppIcon';
 
 const DELAY = 5000;
 
+const toastTypes = {
+  success: 'success',
+  error: 'error',
+};
+
+const toastTypeToAttributes = {
+  success: {
+    className: 'toast_success',
+    icon: 'check-circle',
+  },
+  error: {
+    className: 'toast_error',
+    icon: 'alert-circle',
+  },
+}
+
 export default {
   name: 'AppToast',
 
   components: { AppIcon },
 
-  methods: {
-    error(message) {},
+  created() {
+    this.timers = [];
+  },
 
-    success(message) {},
+  destroyed() {
+    if (this.timers.length) {
+      this.timers.forEach(t => clearTimeout(t));
+    }
+  },
+
+  data() {
+    return {
+      toasts: [],
+    };
+  },
+
+  methods: {
+    error(message) {
+      this.addToast(message, toastTypes.error);
+    },
+
+    success(message) {
+      this.addToast(message, toastTypes.success);
+    },
+
+    addToast(message, toastType) {
+      const { className, icon } = toastTypeToAttributes[toastType];
+
+      this.toasts.push({className, icon, message});
+
+      this.timers.push(setTimeout(() => {
+        this.toasts.splice(0, 1);
+
+        clearTimeout(this.timers[0]);
+        this.timers.splice(0, 1);
+      }, DELAY));
+    },
   },
 };
 </script>
