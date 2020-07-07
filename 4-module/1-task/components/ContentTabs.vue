@@ -1,11 +1,17 @@
 <template>
-  <div class="content-tabs">
+  <div :if="tabs.length" class="content-tabs">
     <div class="content-tabs__nav">
-      <a href="#" class="content-tabs__tab">Page A</a>
-      <a href="#" class="content-tabs__tab">Page B</a>
+      <router-link
+        v-for="tab of tabs"
+        :key="JSON.stringify(tab.to)"
+        :to="tab.to"
+        class="content-tabs__tab"
+        active-class="content-tabs__tab_active">
+        {{tab.text}}
+      </router-link>
     </div>
     <div class="content-tabs__content">
-      Content
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -13,6 +19,14 @@
 <script>
 export default {
   name: 'ContentTabs',
+
+  props: {
+    tabs: {
+      type: Array,
+      required: true,
+      validator: prop => Array.isArray(prop) && prop.every(item => item.to && item.text),
+    }
+  }
 };
 </script>
 
