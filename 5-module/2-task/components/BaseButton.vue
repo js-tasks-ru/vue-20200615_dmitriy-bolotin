@@ -19,7 +19,7 @@ export default {
     tag: {
       type: String,
       default: BUTTON_TYPES.button,
-      validator: prop => !prop || (typeof prop === 'string' && Object.values(BUTTON_TYPES).includes(prop)),
+      validator: prop => Object.values(BUTTON_TYPES).includes(prop),
     },
   },
 };
