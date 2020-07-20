@@ -9,21 +9,12 @@
   >
     <slot name="left-icon" />
 
-    <textarea
-      v-if="multiline"
+    <component
+      :is="multiline ? 'textarea' : 'input'"
       :class="['form-control', {'form-control_rounded': rounded, 'form-control_sm': small}]"
       v-bind="attrs"
       v-on="listeners"
-      :value="value"
-      @input="handleInput"
-    />
-
-    <input
-      v-else
-      :class="['form-control', {'form-control_rounded': rounded, 'form-control_sm': small}]"
-      v-bind="attrs"
-      v-on="listeners"
-      :value="value"
+      :value.prop="value"
       @input="handleInput"
     />
 
