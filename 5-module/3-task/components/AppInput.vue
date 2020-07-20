@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="['input-group', 'input-group_icon', 'input-group_icon-left', 'input-group_icon-right']"
+    :class="[
+      'input-group',
+      'input-group_icon',
+      {'input-group_icon-left': !!$scopedSlots['left-icon'],
+      'input-group_icon-right': !!$scopedSlots['right-icon']
+      }]"
   >
     <slot name="left-icon" />
 
