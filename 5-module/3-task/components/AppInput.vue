@@ -40,14 +40,20 @@ export default {
   props: {
     small: {
       type: Boolean,
+      default: false,
     },
     rounded: {
       type: Boolean,
+      default: false,
     },
     multiline: {
       type: Boolean,
+      default: false,
     },
-    value: {},
+    value: {
+      type: String,
+      default: '',
+    },
   },
 
   model: {
