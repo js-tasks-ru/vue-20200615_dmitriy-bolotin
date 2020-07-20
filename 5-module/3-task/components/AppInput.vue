@@ -1,18 +1,78 @@
 <template>
   <div
-    class="input-group input-group_icon input-group_icon-left input-group_icon-right"
+    :class="[
+      'input-group',
+      'input-group_icon',
+      {'input-group_icon-left': !!$scopedSlots['left-icon'],
+      'input-group_icon-right': !!$scopedSlots['right-icon']
+      }]"
   >
-    <img class="icon" />
+    <slot name="left-icon" />
 
-    <input class="form-control form-control_rounded form-control_sm" />
+    <component
+      :is="multiline ? 'textarea' : 'input'"
+      :class="['form-control', {'form-control_rounded': rounded, 'form-control_sm': small}]"
+      v-bind="attrs"
+      v-on="listeners"
+      :value.prop="value"
+      @input="handleInput"
+    />
 
-    <img class="icon" />
+    <slot name="right-icon" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'AppInput',
+
+  inheritAttrs: false,
+
+  props: {
+    small: {
+      type: Boolean,
+      default: false,
+    },
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+    multiline: {
+      type: Boolean,
+      default: false,
+    },
+    value: {
+      type: String,
+      default: '',
+    },
+  },
+
+  model: {
+    prop: 'value',
+    event: 'input',
+  },
+
+  computed: {
+    attrs() {
+      const {value, ...restAttrs} = this.$attrs;
+
+      return {...restAttrs};
+    },
+
+    listeners() {
+      const {input, ...restListeners} = this.$listeners;
+
+      return {...restListeners};
+    }
+  },
+
+  methods: {
+    handleInput($event) {
+      const {value} = $event.target;
+
+      this.$emit('input', value);
+    }
+  },
 };
 </script>
 
