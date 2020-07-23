@@ -1,6 +1,13 @@
 <template>
   <label class="checkbox">
-    <input type="checkbox" />
+    <input
+      type="checkbox"
+      :value="value"
+      :checked="ownChecked"
+      v-bind="attrs"
+      v-on="listeners"
+      @change="handleChange"
+    />
     <slot />
     <span></span>
   </label>
@@ -9,6 +16,60 @@
 <script>
 export default {
   name: 'AppCheckbox',
+
+  props: {
+    value: String,
+    checked: [Boolean, String, Array],
+  },
+
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+
+  computed: {
+    attrs() {
+      const {value, checked, ...restAttrs} = this.$attrs;
+
+      return {...restAttrs};
+    },
+
+    listeners() {
+      const {change, ...restListeners} = this.$listeners;
+
+      return {...restListeners};
+    },
+
+    ownChecked() {
+      if (Array.isArray(this.checked)) {
+        return this.checked.includes(this.value);
+      }
+
+      return this.checked;
+    },
+  },
+
+  methods: {
+    handleChange($event) {
+      const {value, checked} = $event.target;
+      let result = checked;
+
+      if (Array.isArray(this.checked)) {
+        const checkedClone = [...this.checked];
+
+        if (this.checked.includes(value)) {
+          checkedClone.splice(checkedClone.findIndex(val => val === value), 1);
+        } else {
+          checkedClone.push(value);
+        }
+
+        result = checkedClone;
+      }
+
+
+      this.$emit('change', result);
+    }
+  },
 };
 </script>
 

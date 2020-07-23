@@ -32,10 +32,8 @@
     },
 
     watch: {
-      count: function(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.count_ = newValue;
-        }
+      count: function(newValue) {
+        this.count_ = newValue;
       },
     }
   };
