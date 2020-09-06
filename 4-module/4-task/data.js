@@ -26,7 +26,7 @@ export async function login(email, password) {
  * @param {string} password - пароль пользователя
  * @return {Promise} - объект с данными зарегистрированного пользователя
  */
-export async function register({email, fullname, password}) {
+export async function register(email, fullname, password) {
   const response = await fetch(`${API_URL}/auth/register`, {
     method: 'POST',
     headers: {
